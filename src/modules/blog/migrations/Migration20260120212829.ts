@@ -1,6 +1,6 @@
 import { Migration } from "@medusajs/framework/mikro-orm/migrations";
 
-export class Migration20250201000000 extends Migration {
+export class Migration20260120212829 extends Migration {
 
   override async up(): Promise<void> {
     this.addSql(`alter table "post" add column "content" text not null default '';`);
