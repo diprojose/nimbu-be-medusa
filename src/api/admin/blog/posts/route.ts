@@ -1,0 +1,50 @@
+import {
+  AuthenticatedMedusaRequest,
+  MedusaResponse,
+} from "@medusajs/framework/http"
+import { CreatePostSchema } from "./validators"
+import { BLOG_MODULE } from "../../../../modules/blog"
+import BlogModuleService from "../../../../modules/blog/service"
+
+export const GET = async (
+  req: AuthenticatedMedusaRequest,
+  res: MedusaResponse
+) => {
+  const blogModuleService: BlogModuleService = req.scope.resolve(BLOG_MODULE)
+
+  const limit = parseInt(req.query.limit as string) || 20
+  const offset = parseInt(req.query.offset as string) || 0
+
+  const [posts, count] = await blogModuleService.listAndCountPosts(
+    {},
+    {
+      skip: offset,
+      take: limit,
+    }
+  )
+
+  res.json({
+    posts,
+    count,
+    limit,
+    offset,
+  })
+}
+
+export const POST = async (
+  req: AuthenticatedMedusaRequest,
+  res: MedusaResponse
+) => {
+  const validation = CreatePostSchema.safeParse(req.body)
+
+  if (!validation.success) {
+     res.status(400).json({ message: "Invalid request body", errors: validation.error })
+     return
+  }
+
+  const blogModuleService: BlogModuleService = req.scope.resolve(BLOG_MODULE)
+
+  const post = await blogModuleService.createPosts(validation.data)
+
+  res.json({ post })
+}
