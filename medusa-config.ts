@@ -33,4 +33,7 @@ module.exports = defineConfig({
       resolve: "./modules/blog",
     },
   ],
+  admin: {
+    disable: true, 
+  }
 })
