@@ -25,11 +25,7 @@ module.exports = defineConfig({
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     }
   },
-  modules: [
-    {
-      resolve: "./modules/blog",
-    },
-  ],
+  modules: [],
   admin: {
     disable: true,
   }
