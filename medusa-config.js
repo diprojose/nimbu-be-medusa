@@ -15,8 +15,11 @@ module.exports = defineConfig({
       },
       pool: {
         min: 0,
-        max: 4, // Mantenlo bajo (4 o 5 es seguro para el plan Nano)
+        max: 2, 
         idleTimeoutMillis: 30000,
+        createTimeoutMillis: 30000,
+        acquireTimeoutMillis: 60000,
+        propagateCreateError: false
       },
     },
     driverOptions: {
