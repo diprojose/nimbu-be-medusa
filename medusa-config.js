@@ -9,7 +9,16 @@ const ADMIN_CORS = process.env.ADMIN_CORS || "http://localhost:9000";
 module.exports = defineConfig({
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
-    // Configuración para que Supabase acepte la conexión segura
+    databaseDriverOptions: {
+      connection: {
+        ssl: { rejectUnauthorized: false },
+      },
+      pool: {
+        min: 0,
+        max: 4, // Mantenlo bajo (4 o 5 es seguro para el plan Nano)
+        idleTimeoutMillis: 30000,
+      },
+    },
     driverOptions: {
       connection: {
         ssl: {
@@ -25,8 +34,31 @@ module.exports = defineConfig({
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     }
   },
-  modules: [],
+  modules: [
+    {
+      resolve: "@medusajs/file",
+      options: {
+        providers: [
+          {
+            resolve: "@medusajs/file-s3",
+            id: "s3",
+            options: {
+              file_url: process.env.S3_FILE_URL,
+              access_key_id: process.env.S3_ACCESS_KEY_ID,
+              secret_access_key: process.env.S3_SECRET_ACCESS_KEY,
+              region: process.env.S3_REGION,
+              bucket: process.env.S3_BUCKET,
+              endpoint: process.env.S3_ENDPOINT,
+              additional_client_config: {
+                forcePathStyle: true,
+              },
+            },
+          },
+        ],
+      },
+    },
+  ],
   admin: {
-    disable: true,
+    disable: process.env.NODE_ENV === 'production',
   }
 });
