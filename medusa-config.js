@@ -15,11 +15,9 @@ module.exports = defineConfig({
       },
       pool: {
         min: 0,
-        max: 2, 
-        idleTimeoutMillis: 30000,
-        createTimeoutMillis: 30000,
-        acquireTimeoutMillis: 60000,
-        propagateCreateError: false
+        max: 2, // MÁXIMO 2 conexiones. No lo subas.
+        idleTimeoutMillis: 10000, // Cierra rápido si no se usa
+        acquireTimeoutMillis: 200000, // IMPORTANTE: Dale mucho tiempo (200s) para conectar antes de dar error
       },
     },
     driverOptions: {
