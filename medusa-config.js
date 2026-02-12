@@ -14,10 +14,10 @@ module.exports = defineConfig({
         ssl: { rejectUnauthorized: false },
       },
       pool: {
-        min: 0,
-        max: 2, // MÁXIMO 2 conexiones. No lo subas.
-        idleTimeoutMillis: 10000, // Cierra rápido si no se usa
-        acquireTimeoutMillis: 200000, // IMPORTANTE: Dale mucho tiempo (200s) para conectar antes de dar error
+        min: 2, // Es bueno tener un par de conexiones listas
+        max: 15, // Aumentamos el límite para que Medusa pueda arrancar
+        idleTimeoutMillis: 30000, 
+        acquireTimeoutMillis: 60000, // 60 segundos es más que suficiente
       },
     },
     driverOptions: {
